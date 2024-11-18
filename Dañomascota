@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Calculador de Daño de Mascotas</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f0f8ff;
+            color: #333;
+            margin: 20px;
+        }
+        h1 {
+            color: #003366;
+        }
+        label, select, button {
+            margin-top: 10px;
+            display: block;
+        }
+        .resultado {
+            margin-top: 20px;
+            background-color: #e6f7ff;
+            padding: 10px;
+            border: 1px solid #b3d9ff;
+        }
+        footer {
+            margin-top: 30px;
+            font-size: 12px;
+            color: #666;
+        }
+    </style>
+</head>
+<body>
+
+    <h1>Calculador de Daño de Mascotas</h1>
+
+    <label for="mascota">Selecciona tu mascota:</label>
+    <select id="mascota" onchange="mostrarMagias()">
+        <option value="buitre">Búho mágico</option>
+        <option value="capibara">Capibara</option>
+        <option value="tortuga">Tortuga</option>
+        <option value="hada">Hada</option>
+        <!-- Otras mascotas pueden añadirse aquí -->
+    </select>
+
+    <label for="nivel">Selecciona el nivel (1-200):</label>
+    <input type="number" id="nivel" min="1" max="200" value="1">
+
+    <label>
+        <input type="checkbox" id="evolucionada"> Mascota evolucionada
+    </label>
+    <label>
+        <input type="checkbox" id="vida"> La mascota tiene vida
+    </label>
+
+    <button onclick="calcularDanio()">Calcular Daño</button>
+
+    <div class="resultado" id="resultado" style="display: none;"></div>
+
+    <label for="idioma">Selecciona un idioma:</label>
+    <select id="idioma" onchange="traduccion()">
+        <option value="es">Español</option>
+        <option value="pt">Português</option>
+        <option value="pl">Polski</option>
+        <option value="en">English</option>
+    </select>
+
+    <footer>
+        Creado por Alberto Utrilla (Juniorist)
+    </footer>
+
+    <script>
+        const magias = {
+            "buitre": [
+                { tipo: "beneficio", texto: "Elimina los bufos del oponente" },
+                { tipo: "formula", texto: "Quema mínimo 3 por nivel y máximo 4 por nivel" },
+                { tipo: "formula", texto: "Daño a la vida y el mana del oponente de mínimo 3 por nivel y máximo 4 por nivel" }
+            ],
+            "capibara": [
+                { tipo: "beneficio", texto: "Aumenta tu velocidad un 10%" },
+                { tipo: "beneficio", texto: "Aumenta su velocidad de ataque un 50%" },
+                { tipo: "formula", texto: "Golpea al enemigo mínimo 3 por nivel y máximo 4 por nivel" }
+            ],
+            "tortuga": [
+                { tipo: "beneficio", texto: "Aumenta tu armadura un 40%" },
+                { tipo: "beneficio", texto: "Atrae a los monstruos" },
+                { tipo: "beneficio", texto: "Refleja el 50% de daño de los ataques y Reléntiza 20%" }
+            ],
+            "hada": [
+                { tipo: "beneficio", texto: "Elimina los bufos negativos" },
+                { tipo: "formula", texto: "Regenera mínimo 1.9 por nivel y máximo 2.1 por nivel mana y vida" },
+                { tipo: "beneficio", texto: "Echa el bufo de resucitar con 777" }
+            ]
+        };
+
+        function mostrarMagias() {
+            const mascota = document.getElementById('mascota').value;
+            const magiasDiv = document.getElementById('resultado');
+            let magiasText = "<h3>Magias de la mascota seleccionada:</h3><ul>";
+            magias[mascota].forEach(magia => {
+                magiasText += `<li>${magia.texto} (${magia.tipo})</li>`;
+            });
+            magiasText += "</ul>";
+            magiasDiv.innerHTML = magiasText;
+        }
+
+        function calcularDanio() {
+            const nivel = parseInt(document.getElementById('nivel').value);
+            const evolucionada = document.getElementById('evolucionada').checked;
+            const vida = document.getElementById('vida').checked;
+
+            const mascota = document.getElementById('mascota').value;
+
+            // Calcular daño
+            const dañoMinimo = nivel * (3 + (evolucionada || vida ? 2 : 1));
+            const dañoMaximo = nivel * (4 + (evolucionada || vida ? 2 : 1));
+            const dañoTotalMaximo = dañoMaximo * (evolucionada && vida ? 4 : evolucionada || vida ? 2 : 1);
+            
+            // Resultados
+            const resultadoDiv = document.getElementById('resultado');
+            resultadoDiv.innerHTML += `<h3>Resultados del cálculo:</h3>`;
+            resultadoDiv.innerHTML += `<p>Daño Mínimo: ${dañoMinimo}</p>`;
+            resultadoDiv.innerHTML += `<p>Daño Máximo: ${dañoMaximo}</p>`;
+            resultadoDiv.innerHTML += `<p>Daño Total Máximo: ${dañoTotalMaximo}</p>`;
+            resultadoDiv.style.display = 'block';
+        }
+
+        function traduccion() {
+            // Implementar las traducciones según el idioma seleccionado
+            alert('La función de traducción aún no está implementada.');
+        }
+    </script>
+</body>
+</html>
